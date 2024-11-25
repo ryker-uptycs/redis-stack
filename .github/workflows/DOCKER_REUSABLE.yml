@@ -108,8 +108,9 @@ jobs:
         run: |
           source .venv/bin/activate
           invoke dockergen -p ${{ matrix.package }}
-          echo "DOCKERFILE=envs/dockers/Dockerfile.${{ matrix.package }}" >> $GITHUB_OUTPUT
-
+          # Docker file generated: /home/runner/work/redis-stack/redis-stack/envs/dockers/Dockerfile.redis-stack
+          ls -R
+          cat envs/dockers/Dockerfile.${{ matrix.package }}
       # - name: Log in to DockerHub
       #   if: steps.iamafork.outputs.IAMAFORK == 'false'
       #   uses: docker/login-action@v2
