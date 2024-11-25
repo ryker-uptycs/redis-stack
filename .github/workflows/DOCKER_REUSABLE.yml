@@ -80,28 +80,28 @@ jobs:
       #   with:
       #     name: redisinsight-web-${{inputs.platform}}-${{inputs.arch}}.deb
       #     path: redis-stack
-      # - name: display structure
-      #   if: steps.iamafork.outputs.IAMAFORK == 'false'
-      #   run: ls -R
-
-      # - name: get package version
-      #   if: steps.iamafork.outputs.IAMAFORK == 'false'
-      #   id: get_version
-      #   run: |
-      #     poetry install --no-root
-      #     source .venv/bin/activate
-      #     realversion=`invoke version -p ${{ matrix.package }} -d true`
-      #     echo "VERSION=$realversion" >> $GITHUB_OUTPUT
-
-      - uses: docker/setup-qemu-action@v2
+      - name: display structure
         if: steps.iamafork.outputs.IAMAFORK == 'false'
+        run: ls -R
 
-      # https://github.com/docker/buildx/issues/1509
-      - uses: docker/setup-buildx-action@v2
+      - name: get package version
         if: steps.iamafork.outputs.IAMAFORK == 'false'
-        with:
-          install: true
-          version: v0.9.1
+        id: get_version
+        run: |
+          poetry install --no-root
+          source .venv/bin/activate
+          realversion=`invoke version -p ${{ matrix.package }} -d true`
+          echo "VERSION=$realversion" >> $GITHUB_OUTPUT
+
+      # - uses: docker/setup-qemu-action@v2
+      #   if: steps.iamafork.outputs.IAMAFORK == 'false'
+
+      # # https://github.com/docker/buildx/issues/1509
+      # - uses: docker/setup-buildx-action@v2
+      #   if: steps.iamafork.outputs.IAMAFORK == 'false'
+      #   with:
+      #     install: true
+      #     version: v0.9.1
 
       - name: generate docker file
         # if: steps.iamafork.outputs.IAMAFORK == 'false'
