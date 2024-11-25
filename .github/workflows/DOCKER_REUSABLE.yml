@@ -1,7 +1,7 @@
 name: Docker
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       pythonversion:
         required: false
@@ -14,11 +14,11 @@ on:
       platform:
         required: true
         type: string
-    secrets:
-      DOCKERHUB_TOKEN:
-        required: true
-      DOCKERHUB_USERNAME:
-        required: true
+    # secrets:
+    #   DOCKERHUB_TOKEN:
+    #     required: true
+    #   DOCKERHUB_USERNAME:
+    #     required: true
 
 jobs:
 
@@ -104,10 +104,11 @@ jobs:
           version: v0.9.1
 
       - name: generate docker file
-        if: steps.iamafork.outputs.IAMAFORK == 'false'
+        # if: steps.iamafork.outputs.IAMAFORK == 'false'
         run: |
           source .venv/bin/activate
           invoke dockergen -p ${{ matrix.package }}
+          echo "DOCKERFILE=envs/dockers/Dockerfile.${{ matrix.package }}" >> $GITHUB_OUTPUT
 
       - name: Log in to DockerHub
         if: steps.iamafork.outputs.IAMAFORK == 'false'
